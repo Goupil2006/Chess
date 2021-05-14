@@ -15,11 +15,51 @@ class Board {
 			}
 			this.Feld.push(rank);
 		}
-		this.Feld[5][5] = new Rook(5, 5, "W");
+		this.Feld[6][0] = new Pawn(0, 6, "W");
+		this.Feld[6][1] = new Pawn(1, 6, "W");
+		this.Feld[6][2] = new Pawn(2, 6, "W");
+		this.Feld[6][3] = new Pawn(3, 6, "W");
+		this.Feld[6][4] = new Pawn(4, 6, "W");
+		this.Feld[6][5] = new Pawn(5, 6, "W");
+		this.Feld[6][6] = new Pawn(6, 6, "W");
+		this.Feld[6][7] = new Pawn(7, 6, "W");
+
+		this.Feld[7][0] = new Rook(0, 7, "W");
+		this.Feld[7][1] = new Knight(1, 7, "W");
+		this.Feld[7][2] = new Bichop(2, 7, "W");
+		this.Feld[7][3] = new Queen(3, 7, "W");
+		this.Feld[7][4] = new King(4, 7, "W");
+		this.Feld[7][5] = new Bichop(5, 7, "W");
+		this.Feld[7][6] = new Knight(6, 7, "W");
+		this.Feld[7][7] = new Rook(7, 7, "W");
+
+		this.Feld[1][0] = new Pawn(0, 1, "B");
+		this.Feld[1][1] = new Pawn(1, 1, "B");
+		this.Feld[1][2] = new Pawn(2, 1, "B");
+		this.Feld[1][3] = new Pawn(3, 1, "B");
+		this.Feld[1][4] = new Pawn(4, 1, "B");
+		this.Feld[1][5] = new Pawn(5, 1, "B");
+		this.Feld[1][6] = new Pawn(6, 1, "B");
+		this.Feld[1][7] = new Pawn(7, 1, "B");
+
+		this.Feld[0][0] = new Rook(0, 0, "B");
+		this.Feld[0][1] = new Knight(1, 0, "B");
+		this.Feld[0][2] = new Bichop(2, 0, "B");
+		this.Feld[0][3] = new Queen(3, 0, "B");
+		this.Feld[0][4] = new King(4, 0, "B");
+		this.Feld[0][5] = new Bichop(5, 0, "B");
+		this.Feld[0][6] = new Knight(6, 0, "B");
+		this.Feld[0][7] = new Rook(7, 0, "B");
+
+		/*this.Feld[5][5] = new Rook(5, 5, "W");
 		this.Feld[0][0] = new King(0, 0, "W");
 		this.Feld[4][5] = new Rook(5, 4, "B");
 		this.Feld[4][0] = new King(0, 4, "B");
-		console.log(this.Feld);
+		this.Feld[3][2] = new Bichop(2, 3, "B");
+		this.Feld[7][7] = new Knight(7, 7, "W");
+		this.Feld[5][3] = new Queen(3, 5, "W");
+		this.Feld[6][0] = new Pawn(0, 6, "W");*/
+
 		this.startrender();
 		this.render();
 
@@ -29,12 +69,10 @@ class Board {
 					if (this.state === 1) {
 						if (document.getElementById(String(i) + String(j)).innerHTML != "") {
 							this.move += String(i) + String(j);
-							console.log(this.move);
 							this.state++;
 						}
 					} else if (this.state === 2) {
 						this.move += String(i) + String(j);
-						console.log(this.move);
 						this.state++;
 						this.movemove();
 					}
@@ -53,6 +91,14 @@ class Board {
 						this.testFeld[i][j] = new King(j, i, this.testFeld[i][j].color);
 					} else if (this.testFeld[i][j].name == "T") {
 						this.testFeld[i][j] = new Rook(j, i, this.testFeld[i][j].color);
+					} else if (this.testFeld[i][j].name == "L") {
+						this.testFeld[i][j] = new Bichop(j, i, this.testFeld[i][j].color);
+					} else if (this.testFeld[i][j].name == "S") {
+						this.testFeld[i][j] = new Knight(j, i, this.testFeld[i][j].color);
+					} else if (this.testFeld[i][j].name == "Q") {
+						this.testFeld[i][j] = new Queen(j, i, this.testFeld[i][j].color);
+					} else if (this.testFeld[i][j].name == "B") {
+						this.testFeld[i][j] = new Pawn(j, i, this.testFeld[i][j].color);
 					}
 				}
 			}
@@ -60,7 +106,6 @@ class Board {
 	}
 
 	movemove() {
-		console.log("test");
 		let Temp = this.move.split("");
 		this.move = "";
 		this.state = 1;
@@ -89,8 +134,6 @@ class Board {
 				this.testFeld[Temp1][Temp2] = "";
 				this.testFeld[Temp3][Temp4] = Figurtest;
 
-				console.log(this.testFeld);
-
 				let movescheck = [];
 
 				this.testFeld.forEach((rank) => {
@@ -107,8 +150,6 @@ class Board {
 				});
 
 				this.Tempispin = false;
-				console.log(this.Feld);
-				console.log(movescheck);
 
 				movescheck.forEach((move) => {
 					if (this.testFeld[move[0]]) {
@@ -126,8 +167,23 @@ class Board {
 					this.Feld[Temp3][Temp4] = Figur;
 					if (this.allowed == "W") {
 						this.allowed = "B";
+						document.getElementById("had").innerHTML = "Schwarz ist am Zug";
 					} else if (this.allowed == "B") {
 						this.allowed = "W";
+						document.getElementById("had").innerHTML = "Weiß ist am Zug";
+					}
+
+					for (let y = 0; y < 8; y++) {
+						if (this.Feld[7][y] != "") {
+							if (this.Feld[7][y].name == "B" && this.Feld[7][y].color == "B") {
+								this.Feld[7][y] = new Queen(y, 7, "B");
+							}
+						}
+						if (this.Feld[0][y] != "") {
+							if (this.Feld[0][y].name == "B" && this.Feld[0][y].color == "W") {
+								this.Feld[0][y] = new Queen(y, 0, "W");
+							}
+						}
 					}
 					this.render();
 				}
@@ -198,14 +254,11 @@ class Board {
 					}
 				}
 
-				console.log(TempTempischeck);
-				console.log(refTemp);
-
 				if (TempTempischeck == refTemp) {
 					this.ischeckmate = true;
 				}
 				if (this.ischeckmate) {
-					console.log("checkmate");
+					document.getElementById("had").innerHTML = "Checkmate";
 				}
 			}
 		}
@@ -250,11 +303,13 @@ class piece {
 		this.x = x;
 		this.y = y;
 		this.color = color;
+		this.movesdone = 0;
 	}
 
 	change(x, y) {
 		this.x = x;
 		this.y = y;
+		this.movesdone++;
 	}
 
 	moves(Feld) {
@@ -350,6 +405,284 @@ class King extends piece {
 				}
 			}
 		});
+
+		return moves;
+	}
+}
+
+class Bichop extends piece {
+	constructor(x, y, color) {
+		super(x, y, color);
+		this.name = "L";
+	}
+
+	posmoves(x, y, Feld) {
+		let moves = [];
+
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y + i]) {
+				if (Feld[y + i][x + i]) {
+					if (Feld[y + i][x + i].color != this.color) {
+						moves.push([y + i, x + i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y + i, x + i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y - i]) {
+				if (Feld[y - i][x - i]) {
+					if (Feld[y - i][x - i].color != this.color) {
+						moves.push([y - i, x - i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y - i, x - i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y + i]) {
+				if (Feld[y + i][x - i]) {
+					if (Feld[y + i][x - i].color != this.color) {
+						moves.push([y + i, x - i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y + i, x - i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y - i]) {
+				if (Feld[y - i][x + i]) {
+					if (Feld[y - i][x + i].color != this.color) {
+						moves.push([y - i, x + i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y - i, x + i]);
+				}
+			}
+		}
+
+		return moves;
+	}
+}
+
+class Knight extends piece {
+	constructor(x, y, color) {
+		super(x, y, color);
+		this.name = "S";
+	}
+
+	posmoves(x, y, Feld) {
+		let moves = [];
+		moves.push([y + 2, x - 1]);
+		moves.push([y + 2, x + 1]);
+		moves.push([y - 1, x + 2]);
+		moves.push([y + 1, x + 2]);
+		moves.push([y - 2, x - 1]);
+		moves.push([y - 2, x + 1]);
+		moves.push([y - 1, x - 2]);
+		moves.push([y + 1, x - 2]);
+
+		moves.forEach((move, i) => {
+			if (Feld[move[0]]) {
+				if (Feld[move[0]][move[1]]) {
+					if (Feld[move[0]][move[1]].color == this.color) {
+						moves.splice(i, 1);
+					}
+				}
+			}
+		});
+		return moves;
+	}
+}
+
+class Queen extends piece {
+	constructor(x, y, color) {
+		super(x, y, color);
+		this.name = "Q";
+	}
+
+	posmoves(x, y, Feld) {
+		let moves = [];
+
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y + i]) {
+				if (Feld[y + i][x + i]) {
+					if (Feld[y + i][x + i].color != this.color) {
+						moves.push([y + i, x + i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y + i, x + i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y - i]) {
+				if (Feld[y - i][x - i]) {
+					if (Feld[y - i][x - i].color != this.color) {
+						moves.push([y - i, x - i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y - i, x - i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y + i]) {
+				if (Feld[y + i][x - i]) {
+					if (Feld[y + i][x - i].color != this.color) {
+						moves.push([y + i, x - i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y + i, x - i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y - i]) {
+				if (Feld[y - i][x + i]) {
+					if (Feld[y - i][x + i].color != this.color) {
+						moves.push([y - i, x + i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y - i, x + i]);
+				}
+			}
+		}
+
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y]) {
+				if (Feld[y][x + i]) {
+					if (Feld[y][x + i].color != this.color) {
+						moves.push([y, x + i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y, x + i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y]) {
+				if (Feld[y][x - i]) {
+					if (Feld[y][x - i].color != this.color) {
+						moves.push([y, x - i]);
+					}
+					i = 10;
+				} else {
+					moves.push([y, x - i]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y + i]) {
+				if (Feld[y + i][x]) {
+					if (Feld[y + i][x].color != this.color) {
+						moves.push([y + i, x]);
+					}
+					i = 10;
+				} else {
+					moves.push([y + i, x]);
+				}
+			}
+		}
+		for (let i = 1; i < 8; i++) {
+			if (Feld[y - i]) {
+				if (Feld[y - i][x]) {
+					if (Feld[y - i][x].color != this.color) {
+						moves.push([y - i, x]);
+					}
+					i = 10;
+				} else {
+					moves.push([y - i, x]);
+				}
+			}
+		}
+
+		return moves;
+	}
+}
+
+class Pawn extends piece {
+	constructor(x, y, color) {
+		super(x, y, color);
+		this.name = "B";
+	}
+
+	posmoves(x, y, Feld) {
+		let moves = [];
+
+		if (this.color == "W") {
+			if (Feld[y - 1][x] == "") {
+				moves.push([y - 1, x]);
+			}
+
+			if (this.movesdone == 0) {
+				if (Feld[y - 2]) {
+					if (Feld[y - 2][x] == "" && Feld[y - 1][x] == "") {
+						moves.push([y - 2, x]);
+					}
+				}
+			}
+			if (Feld[y - 1]) {
+				if (Feld[y - 1][x + 1]) {
+					if (Feld[y - 1][x + 1] != "") {
+						if (Feld[y - 1][x + 1].color != this.color) {
+							moves.push([y - 1, x + 1]);
+						}
+					}
+				}
+			}
+			if (Feld[y - 1]) {
+				if (Feld[y - 1][x - 1]) {
+					if (Feld[y - 1][x - 1] != "") {
+						if (Feld[y - 1][x - 1].color != this.color) {
+							moves.push([y - 1, x - 1]);
+						}
+					}
+				}
+			}
+		} else if (this.color == "B") {
+			if (Feld[y + 1][x] == "") {
+				moves.push([y + 1, x]);
+			}
+
+			if (this.movesdone == 0) {
+				if (Feld[y + 2]) {
+					if (Feld[y + 2][x] == "" && Feld[y + 1][x] == "") {
+						moves.push([y + 2, x]);
+					}
+				}
+			}
+			if (Feld[y + 1]) {
+				if (Feld[y + 1][x + 1]) {
+					if (Feld[y + 1][x + 1] != "") {
+						if (Feld[y + 1][x + 1].color != this.color) {
+							moves.push([y + 1, x + 1]);
+						}
+					}
+				}
+			}
+			if (Feld[y + 1]) {
+				if (Feld[y + 1][x - 1]) {
+					if (Feld[y + 1][x - 1] != "") {
+						if (Feld[y + 1][x - 1].color != this.color) {
+							moves.push([y + 1, x - 1]);
+						}
+					}
+				}
+			}
+		}
 
 		return moves;
 	}

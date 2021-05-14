@@ -1,3 +1,7 @@
+body {
+    cursor: pointer;
+}
+
 table td {
     position: relative;
     width: 5em;
