@@ -357,7 +357,7 @@ class piece {
 	}
 
 	moves(Feld) {
-		let moves = this.posmoves(this.x, this.y, Feld);
+		let moves = this.posmoves(this.x, this.y, Feld, this.color);
 		return moves;
 	}
 }
@@ -429,60 +429,60 @@ class King extends piece {
 		this.name = "K";
 	}
 
-	posmoves(x, y, Feld) {
+	posmoves(x, y, Feld, color) {
 		let moves = [];
 		if (Feld[y]) {
 			if (Feld[y][x + 1] != undefined) {
-				if (!Feld[y][x + 1] == this.color || Feld[y][x + 1] == "") {
+				if (Feld[y][x + 1].color != color || Feld[y][x + 1] == "") {
 					moves.push([y, x + 1]);
 				}
 			}
 		}
 		if (Feld[y]) {
 			if (Feld[y][x - 1] != undefined) {
-				if (!Feld[y][x - 1] == this.color || Feld[y][x - 1] == "") {
+				if (Feld[y][x - 1].color != color || Feld[y][x - 1] == "") {
 					moves.push([y, x - 1]);
 				}
 			}
 		}
 		if (Feld[y + 1]) {
 			if (Feld[y + 1][x] != undefined) {
-				if (!Feld[y + 1][x] == this.color || Feld[y + 1][x] == "") {
+				if (Feld[y + 1][x].color != color || Feld[y + 1][x] == "") {
 					moves.push([y + 1, x]);
 				}
 			}
 		}
 		if (Feld[y - 1]) {
 			if (Feld[y - 1][x] != undefined) {
-				if (!Feld[y - 1][x] == this.color || Feld[y - 1][x] == "") {
+				if (Feld[y - 1][x].color != color || Feld[y - 1][x] == "") {
 					moves.push([y - 1, x]);
 				}
 			}
 		}
 		if (Feld[y + 1]) {
 			if (Feld[y + 1][x + 1] != undefined) {
-				if (!Feld[y + 1][x + 1] == this.color || Feld[y + 1][x + 1] == "") {
+				if (Feld[y + 1][x + 1].color != color || Feld[y + 1][x + 1] == "") {
 					moves.push([y + 1, x + 1]);
 				}
 			}
 		}
 		if (Feld[y - 1]) {
 			if (Feld[y - 1][x + 1] != undefined) {
-				if (!Feld[y - 1][x + 1] == this.color || Feld[y - 1][x + 1] == "") {
+				if (Feld[y - 1][x + 1].color != color || Feld[y - 1][x + 1] == "") {
 					moves.push([y - 1, x + 1]);
 				}
 			}
 		}
 		if (Feld[y + 1]) {
 			if (Feld[y + 1][x - 1] != undefined) {
-				if (!Feld[y + 1][x - 1] == this.color || Feld[y + 1][x - 1] == "") {
+				if (Feld[y + 1][x - 1].color != color || Feld[y + 1][x - 1] == "") {
 					moves.push([y + 1, x - 1]);
 				}
 			}
 		}
 		if (Feld[y - 1]) {
 			if (Feld[y - 1][x - 1] != undefined) {
-				if (!Feld[y - 1][x - 1] == this.color || Feld[y - 1][x - 1] == "") {
+				if (Feld[y - 1][x - 1].color != color || Feld[y - 1][x - 1] == "") {
 					moves.push([y - 1, x - 1]);
 				}
 			}
@@ -595,56 +595,56 @@ class Knight extends piece {
 
 		if (Feld[y + 2]) {
 			if (Feld[y + 2][x - 1] != undefined) {
-				if (!Feld[y + 2][x - 1] == this.color || Feld[y + 2][x - 1] == "") {
+				if (Feld[y + 2][x - 1].color != this.color || Feld[y + 2][x - 1] == "") {
 					moves.push([y + 2, x - 1]);
 				}
 			}
 		}
 		if (Feld[y + 2]) {
 			if (Feld[y + 2][x + 1] != undefined) {
-				if (!Feld[y + 2][x + 1] == this.color || Feld[y + 2][x + 1] == "") {
+				if (Feld[y + 2][x + 1].color != this.color || Feld[y + 2][x + 1] == "") {
 					moves.push([y + 2, x + 1]);
 				}
 			}
 		}
 		if (Feld[y - 1]) {
 			if (Feld[y - 1][x + 2] != undefined) {
-				if (!Feld[y - 1][x + 2] == this.color || Feld[y - 1][x + 2] == "") {
+				if (Feld[y - 1][x + 2].color != this.color || Feld[y - 1][x + 2] == "") {
 					moves.push([y - 1, x + 2]);
 				}
 			}
 		}
 		if (Feld[y + 1]) {
 			if (Feld[y + 1][x + 2] != undefined) {
-				if (!Feld[y + 1][x + 2] == this.color || Feld[y + 1][x + 2] == "") {
+				if (Feld[y + 1][x + 2].color != this.color || Feld[y + 1][x + 2] == "") {
 					moves.push([y + 1, x + 2]);
 				}
 			}
 		}
 		if (Feld[y - 2]) {
 			if (Feld[y - 2][x - 1] != undefined) {
-				if (!Feld[y - 2][x - 1] == this.color || Feld[y - 2][x - 1] == "") {
+				if (Feld[y - 2][x - 1].color != this.color || Feld[y - 2][x - 1] == "") {
 					moves.push([y - 2, x - 1]);
 				}
 			}
 		}
 		if (Feld[y - 2]) {
 			if (Feld[y - 2][x + 1] != undefined) {
-				if (!Feld[y - 2][x + 1] == this.color || Feld[y - 2][x + 1] == "") {
+				if (Feld[y - 2][x + 1].color != this.color || Feld[y - 2][x + 1] == "") {
 					moves.push([y - 2, x + 1]);
 				}
 			}
 		}
 		if (Feld[y - 1]) {
 			if (Feld[y - 1][x - 2] != undefined) {
-				if (!Feld[y - 1][x - 2] == this.color || Feld[y - 1][x - 2] == "") {
+				if (Feld[y - 1][x - 2].color != this.color || Feld[y - 1][x - 2] == "") {
 					moves.push([y - 1, x - 2]);
 				}
 			}
 		}
 		if (Feld[y + 1]) {
 			if (Feld[y + 1][x - 2] != undefined) {
-				if (!Feld[y + 1][x - 2] == this.color || Feld[y + 1][x - 2] == "") {
+				if (Feld[y + 1][x - 2].color != this.color || Feld[y + 1][x - 2] == "") {
 					moves.push([y + 1, x - 2]);
 				}
 			}
