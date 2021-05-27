@@ -15,6 +15,63 @@ class Board {
 			}
 			this.Feld.push(rank);
 		}
+		this.constructFeld();
+
+		this.startrender();
+		this.render();
+		this.draggedItem = null;
+
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				if (document.getElementById(String(i) + String(j) + "d")) {
+					document.getElementById(String(i) + String(j) + "d").addEventListener("dragstart", () => {
+						this.move = String(i) + String(j);
+						setTimeout(function () {
+							document.getElementById(String(i) + String(j) + "d").style.display = "none";
+						}, 0);
+					});
+
+					document.getElementById(String(i) + String(j) + "d").addEventListener("dragend", () => {
+						if (document.getElementById(String(i) + String(j) + "d")) {
+							document.getElementById(String(i) + String(j) + "d").style.display = "block";
+						}
+						setTimeout(function () {
+							this.move = "";
+						}, 0);
+					});
+				}
+				document.getElementById(String(i) + String(j)).addEventListener("click", () => {
+					if (this.state === 1) {
+						if (document.getElementById(String(i) + String(j)).innerHTML != "") {
+							this.move += String(i) + String(j);
+							this.state++;
+						}
+					} else if (this.state === 2) {
+						this.move += String(i) + String(j);
+						this.state++;
+						this.movemove();
+					}
+				});
+
+				document.getElementById(String(i) + String(j)).addEventListener("dragover", (e) => {
+					e.preventDefault();
+				});
+
+				document.getElementById(String(i) + String(j)).addEventListener("dragenter", (e) => {
+					e.preventDefault();
+				});
+
+				document.getElementById(String(i) + String(j)).addEventListener("drop", () => {
+					console.log("drop");
+					this.move += String(i) + String(j);
+					console.log(this.move);
+					this.movemove();
+				});
+			}
+		}
+	}
+
+	constructFeld() {
 		this.Feld[6][0] = new Pawn(0, 6, "W");
 		this.Feld[6][1] = new Pawn(1, 6, "W");
 		this.Feld[6][2] = new Pawn(2, 6, "W");
@@ -50,35 +107,6 @@ class Board {
 		this.Feld[0][5] = new Bichop(5, 0, "B");
 		this.Feld[0][6] = new Knight(6, 0, "B");
 		this.Feld[0][7] = new Rook(7, 0, "B");
-
-		/*this.Feld[5][5] = new Rook(5, 5, "W");
-		this.Feld[0][0] = new King(0, 0, "W");
-		this.Feld[4][5] = new Rook(5, 4, "B");
-		this.Feld[4][0] = new King(0, 4, "B");
-		this.Feld[3][2] = new Bichop(2, 3, "B");
-		this.Feld[7][7] = new Knight(7, 7, "W");
-		this.Feld[5][3] = new Queen(3, 5, "W");
-		this.Feld[6][0] = new Pawn(0, 6, "W");*/
-
-		this.startrender();
-		this.render();
-
-		for (let i = 0; i < 8; i++) {
-			for (let j = 0; j < 8; j++) {
-				document.getElementById(String(i) + String(j)).addEventListener("click", () => {
-					if (this.state === 1) {
-						if (document.getElementById(String(i) + String(j)).innerHTML != "") {
-							this.move += String(i) + String(j);
-							this.state++;
-						}
-					} else if (this.state === 2) {
-						this.move += String(i) + String(j);
-						this.state++;
-						this.movemove();
-					}
-				});
-			}
-		}
 	}
 
 	dotestFeld() {
@@ -127,48 +155,7 @@ class Board {
 			});
 
 			if (Temp5) {
-				//assigning Feld to testFeld without linking for pincheck
-
-				this.dotestFeld();
-
-				let Figurtest = this.testFeld[Temp1][Temp2];
-				Figurtest.change(Temp4, Temp3);
-				this.testFeld[Temp1][Temp2] = "";
-				this.testFeld[Temp3][Temp4] = Figurtest;
-				if (moves[Tempmove5][2] != undefined) {
-					this.testFeld[moves[Tempmove5][2]][moves[Tempmove5][3]] = "";
-					if (moves[Tempmove5][4] != undefined) {
-						this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], this.allowed);
-						this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]].change(moves[Tempmove5][5], moves[Tempmove5][4]);
-					}
-				}
-
-				let movescheck = [];
-
-				this.testFeld.forEach((rank) => {
-					rank.forEach((peace) => {
-						if (peace != "") {
-							if (peace.color != this.allowed) {
-								let Tempmoves = peace.moves(this.testFeld);
-								Tempmoves.forEach((Move) => {
-									movescheck.push(Move);
-								});
-							}
-						}
-					});
-				});
-
-				this.Tempispin = false;
-
-				movescheck.forEach((move) => {
-					if (this.testFeld[move[0]]) {
-						if (this.testFeld[move[0]][move[1]]) {
-							if (this.testFeld[move[0]][move[1]].name === "K") {
-								this.Tempispin = true;
-							}
-						}
-					}
-				});
+				this.isPinned(Temp1, Temp2, Temp3, Temp4, Figur, moves, Temp5, Tempmove5);
 
 				if (!this.Tempispin) {
 					for (let i = 0; i < 8; i++) {
@@ -211,10 +198,75 @@ class Board {
 					this.render();
 				}
 
-				//TODO: check if its checkmate
+				this.Eventlisteners();
 				this.ismate();
 			}
 		}
+	}
+
+	Eventlisteners() {
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				if (document.getElementById(String(i) + String(j) + "d")) {
+					document.getElementById(String(i) + String(j) + "d").addEventListener("dragstart", () => {
+						this.move = String(i) + String(j);
+						setTimeout(function () {
+							document.getElementById(String(i) + String(j) + "d").style.display = "none";
+						}, 0);
+					});
+					document.getElementById(String(i) + String(j) + "d").addEventListener("dragend", () => {
+						if (document.getElementById(String(i) + String(j) + "d")) {
+							document.getElementById(String(i) + String(j) + "d").style.display = "block";
+						}
+					});
+				}
+			}
+		}
+	}
+
+	isPinned(Temp1, Temp2, Temp3, Temp4, Figur, moves, Temp5, Tempmove5) {
+		//assigning Feld to testFeld without linking for pincheck
+
+		this.dotestFeld();
+
+		let Figurtest = this.testFeld[Temp1][Temp2];
+		Figurtest.change(Temp4, Temp3);
+		this.testFeld[Temp1][Temp2] = "";
+		this.testFeld[Temp3][Temp4] = Figurtest;
+		if (moves[Tempmove5][2] != undefined) {
+			this.testFeld[moves[Tempmove5][2]][moves[Tempmove5][3]] = "";
+			if (moves[Tempmove5][4] != undefined) {
+				this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], this.allowed);
+				this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]].change(moves[Tempmove5][5], moves[Tempmove5][4]);
+			}
+		}
+
+		let movescheck = [];
+
+		this.testFeld.forEach((rank) => {
+			rank.forEach((peace) => {
+				if (peace != "") {
+					if (peace.color != this.allowed) {
+						let Tempmoves = peace.moves(this.testFeld);
+						Tempmoves.forEach((Move) => {
+							movescheck.push(Move);
+						});
+					}
+				}
+			});
+		});
+
+		this.Tempispin = false;
+
+		movescheck.forEach((move) => {
+			if (this.testFeld[move[0]]) {
+				if (this.testFeld[move[0]][move[1]]) {
+					if (this.testFeld[move[0]][move[1]].name === "K") {
+						this.Tempispin = true;
+					}
+				}
+			}
+		});
 	}
 
 	ismate() {
@@ -324,562 +376,15 @@ class Board {
 			for (let j = 0; j < 8; j++) {
 				if (this.Feld[i][j].name != undefined) {
 					if (this.Feld[i][j].color == "W") {
-						document.getElementById(String(i) + String(j)).innerHTML = "<div class='light'>" + this.Feld[i][j].name + "</div>";
+						document.getElementById(String(i) + String(j)).innerHTML = "<div class='light drag' draggable='true' id='" + String(i) + String(j) + "d'>" + this.Feld[i][j].name + "</div>";
 					} else if (this.Feld[i][j].color == "B") {
-						document.getElementById(String(i) + String(j)).innerHTML = "<div class='dark'>" + this.Feld[i][j].name + "</div>";
+						document.getElementById(String(i) + String(j)).innerHTML = "<div class='dark drag' draggable='true' id='" + String(i) + String(j) + "d'>" + this.Feld[i][j].name + "</div>";
 					}
 				} else {
 					document.getElementById(String(i) + String(j)).innerHTML = "";
 				}
 			}
 		}
-	}
-}
-
-class piece {
-	constructor(x, y, color) {
-		this.x = x;
-		this.y = y;
-		this.color = color;
-		this.movesdone = 0;
-		this.lastmove = false;
-	}
-
-	change(x, y) {
-		this.x = x;
-		this.y = y;
-		this.movesdone++;
-		this.lastmove = true;
-	}
-
-	update() {
-		this.lastmove = false;
-	}
-
-	moves(Feld) {
-		let moves = this.posmoves(this.x, this.y, Feld, this.color);
-		return moves;
-	}
-}
-
-class Rook extends piece {
-	constructor(x, y, color) {
-		super(x, y, color);
-		this.name = "T";
-	}
-
-	posmoves(x, y, Feld) {
-		let moves = [];
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y]) {
-				if (Feld[y][x + i]) {
-					if (Feld[y][x + i].color != this.color) {
-						moves.push([y, x + i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y, x + i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y]) {
-				if (Feld[y][x - i]) {
-					if (Feld[y][x - i].color != this.color) {
-						moves.push([y, x - i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y, x - i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y + i]) {
-				if (Feld[y + i][x]) {
-					if (Feld[y + i][x].color != this.color) {
-						moves.push([y + i, x]);
-					}
-					i = 10;
-				} else {
-					moves.push([y + i, x]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y - i]) {
-				if (Feld[y - i][x]) {
-					if (Feld[y - i][x].color != this.color) {
-						moves.push([y - i, x]);
-					}
-					i = 10;
-				} else {
-					moves.push([y - i, x]);
-				}
-			}
-		}
-
-		return moves;
-	}
-}
-
-class King extends piece {
-	constructor(x, y, color) {
-		super(x, y, color);
-		this.name = "K";
-	}
-
-	posmoves(x, y, Feld, color) {
-		let moves = [];
-		if (Feld[y]) {
-			if (Feld[y][x + 1] != undefined) {
-				if (Feld[y][x + 1].color != color || Feld[y][x + 1] == "") {
-					moves.push([y, x + 1]);
-				}
-			}
-		}
-		if (Feld[y]) {
-			if (Feld[y][x - 1] != undefined) {
-				if (Feld[y][x - 1].color != color || Feld[y][x - 1] == "") {
-					moves.push([y, x - 1]);
-				}
-			}
-		}
-		if (Feld[y + 1]) {
-			if (Feld[y + 1][x] != undefined) {
-				if (Feld[y + 1][x].color != color || Feld[y + 1][x] == "") {
-					moves.push([y + 1, x]);
-				}
-			}
-		}
-		if (Feld[y - 1]) {
-			if (Feld[y - 1][x] != undefined) {
-				if (Feld[y - 1][x].color != color || Feld[y - 1][x] == "") {
-					moves.push([y - 1, x]);
-				}
-			}
-		}
-		if (Feld[y + 1]) {
-			if (Feld[y + 1][x + 1] != undefined) {
-				if (Feld[y + 1][x + 1].color != color || Feld[y + 1][x + 1] == "") {
-					moves.push([y + 1, x + 1]);
-				}
-			}
-		}
-		if (Feld[y - 1]) {
-			if (Feld[y - 1][x + 1] != undefined) {
-				if (Feld[y - 1][x + 1].color != color || Feld[y - 1][x + 1] == "") {
-					moves.push([y - 1, x + 1]);
-				}
-			}
-		}
-		if (Feld[y + 1]) {
-			if (Feld[y + 1][x - 1] != undefined) {
-				if (Feld[y + 1][x - 1].color != color || Feld[y + 1][x - 1] == "") {
-					moves.push([y + 1, x - 1]);
-				}
-			}
-		}
-		if (Feld[y - 1]) {
-			if (Feld[y - 1][x - 1] != undefined) {
-				if (Feld[y - 1][x - 1].color != color || Feld[y - 1][x - 1] == "") {
-					moves.push([y - 1, x - 1]);
-				}
-			}
-		}
-
-		if (this.movesdone == 0) {
-			if (Feld[y][x + 3] != undefined) {
-				if (Feld[y][x + 3].movesdone == 0) {
-					if (Feld[y][x + 2] == "" && Feld[y][x + 1] == "") {
-						moves.push([y, x + 2, y, x + 3, y, x + 1]);
-					}
-				}
-			}
-		}
-
-		if (this.movesdone == 0) {
-			if (Feld[y][x - 4] != undefined) {
-				if (Feld[y][x - 4].movesdone == 0) {
-					if (Feld[y][x - 2] == "" && Feld[y][x - 1] == "" && Feld[y][x - 3] == "") {
-						moves.push([y, x - 2, y, x - 4, y, x - 1]);
-					}
-				}
-			}
-		}
-
-		/*for (let i = 0; i < moves.length; i++) {
-			if (typeof Feld[moves[i][0]] !== "undefined") {
-				if (typeof Feld[moves[i][0]][moves[i][1]] !== "undefined") {
-					if (Feld[moves[i][0]][moves[i][1]].color == this.color) {
-						moves.slice(i);
-					}
-				}
-			}
-		}*/
-
-		return moves;
-	}
-}
-
-class Bichop extends piece {
-	constructor(x, y, color) {
-		super(x, y, color);
-		this.name = "L";
-	}
-
-	posmoves(x, y, Feld) {
-		let moves = [];
-
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y + i]) {
-				if (Feld[y + i][x + i]) {
-					if (Feld[y + i][x + i].color != this.color) {
-						moves.push([y + i, x + i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y + i, x + i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y - i]) {
-				if (Feld[y - i][x - i]) {
-					if (Feld[y - i][x - i].color != this.color) {
-						moves.push([y - i, x - i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y - i, x - i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y + i]) {
-				if (Feld[y + i][x - i]) {
-					if (Feld[y + i][x - i].color != this.color) {
-						moves.push([y + i, x - i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y + i, x - i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y - i]) {
-				if (Feld[y - i][x + i]) {
-					if (Feld[y - i][x + i].color != this.color) {
-						moves.push([y - i, x + i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y - i, x + i]);
-				}
-			}
-		}
-
-		return moves;
-	}
-}
-
-class Knight extends piece {
-	constructor(x, y, color) {
-		super(x, y, color);
-		this.name = "S";
-	}
-
-	posmoves(x, y, Feld) {
-		let moves = [];
-
-		if (Feld[y + 2]) {
-			if (Feld[y + 2][x - 1] != undefined) {
-				if (Feld[y + 2][x - 1].color != this.color || Feld[y + 2][x - 1] == "") {
-					moves.push([y + 2, x - 1]);
-				}
-			}
-		}
-		if (Feld[y + 2]) {
-			if (Feld[y + 2][x + 1] != undefined) {
-				if (Feld[y + 2][x + 1].color != this.color || Feld[y + 2][x + 1] == "") {
-					moves.push([y + 2, x + 1]);
-				}
-			}
-		}
-		if (Feld[y - 1]) {
-			if (Feld[y - 1][x + 2] != undefined) {
-				if (Feld[y - 1][x + 2].color != this.color || Feld[y - 1][x + 2] == "") {
-					moves.push([y - 1, x + 2]);
-				}
-			}
-		}
-		if (Feld[y + 1]) {
-			if (Feld[y + 1][x + 2] != undefined) {
-				if (Feld[y + 1][x + 2].color != this.color || Feld[y + 1][x + 2] == "") {
-					moves.push([y + 1, x + 2]);
-				}
-			}
-		}
-		if (Feld[y - 2]) {
-			if (Feld[y - 2][x - 1] != undefined) {
-				if (Feld[y - 2][x - 1].color != this.color || Feld[y - 2][x - 1] == "") {
-					moves.push([y - 2, x - 1]);
-				}
-			}
-		}
-		if (Feld[y - 2]) {
-			if (Feld[y - 2][x + 1] != undefined) {
-				if (Feld[y - 2][x + 1].color != this.color || Feld[y - 2][x + 1] == "") {
-					moves.push([y - 2, x + 1]);
-				}
-			}
-		}
-		if (Feld[y - 1]) {
-			if (Feld[y - 1][x - 2] != undefined) {
-				if (Feld[y - 1][x - 2].color != this.color || Feld[y - 1][x - 2] == "") {
-					moves.push([y - 1, x - 2]);
-				}
-			}
-		}
-		if (Feld[y + 1]) {
-			if (Feld[y + 1][x - 2] != undefined) {
-				if (Feld[y + 1][x - 2].color != this.color || Feld[y + 1][x - 2] == "") {
-					moves.push([y + 1, x - 2]);
-				}
-			}
-		}
-
-		/*for (let i = 0; i < moves.length; i++) {
-			if (Feld[moves[i][0]]) {
-				if (typeof Feld[moves[i][0]][moves[i][1]] !== "undefined") {
-					if (Feld[moves[i][0]][moves[i][1]].color == this.color) {
-						moves.splice(i, 1);
-					}
-				}
-			}
-		}*/
-		return moves;
-	}
-}
-
-class Queen extends piece {
-	constructor(x, y, color) {
-		super(x, y, color);
-		this.name = "Q";
-	}
-
-	posmoves(x, y, Feld) {
-		let moves = [];
-
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y + i]) {
-				if (Feld[y + i][x + i]) {
-					if (Feld[y + i][x + i].color != this.color) {
-						moves.push([y + i, x + i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y + i, x + i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y - i]) {
-				if (Feld[y - i][x - i]) {
-					if (Feld[y - i][x - i].color != this.color) {
-						moves.push([y - i, x - i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y - i, x - i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y + i]) {
-				if (Feld[y + i][x - i]) {
-					if (Feld[y + i][x - i].color != this.color) {
-						moves.push([y + i, x - i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y + i, x - i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y - i]) {
-				if (Feld[y - i][x + i]) {
-					if (Feld[y - i][x + i].color != this.color) {
-						moves.push([y - i, x + i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y - i, x + i]);
-				}
-			}
-		}
-
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y]) {
-				if (Feld[y][x + i]) {
-					if (Feld[y][x + i].color != this.color) {
-						moves.push([y, x + i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y, x + i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y]) {
-				if (Feld[y][x - i]) {
-					if (Feld[y][x - i].color != this.color) {
-						moves.push([y, x - i]);
-					}
-					i = 10;
-				} else {
-					moves.push([y, x - i]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y + i]) {
-				if (Feld[y + i][x]) {
-					if (Feld[y + i][x].color != this.color) {
-						moves.push([y + i, x]);
-					}
-					i = 10;
-				} else {
-					moves.push([y + i, x]);
-				}
-			}
-		}
-		for (let i = 1; i < 8; i++) {
-			if (Feld[y - i]) {
-				if (Feld[y - i][x]) {
-					if (Feld[y - i][x].color != this.color) {
-						moves.push([y - i, x]);
-					}
-					i = 10;
-				} else {
-					moves.push([y - i, x]);
-				}
-			}
-		}
-
-		return moves;
-	}
-}
-
-class Pawn extends piece {
-	constructor(x, y, color) {
-		super(x, y, color);
-		this.name = "B";
-	}
-
-	posmoves(x, y, Feld) {
-		let moves = [];
-
-		if (this.color == "W") {
-			if (Feld[y - 1]) {
-				if (Feld[y - 1][x - 1] != undefined) {
-					if (Feld[y][x - 1] != "") {
-						if (Feld[y][x - 1].name == "B" && Feld[y][x - 1].color != this.color && Feld[y][x - 1].movesdone == 1 && Feld[y][x - 1].lastmove) {
-							moves.push([y - 1, x - 1, y, x - 1]);
-						}
-					}
-				}
-				if (Feld[y - 1][x + 1] != undefined) {
-					if (Feld[y][x + 1] != "") {
-						if (Feld[y][x + 1].name == "B" && Feld[y][x + 1].color != this.color && Feld[y][x + 1].movesdone == 1 && Feld[y][x + 1].lastmove) {
-							moves.push([y - 1, x + 1, y, x + 1]);
-						}
-					}
-				}
-			}
-
-			if (Feld[y - 1][x] == "") {
-				moves.push([y - 1, x]);
-			}
-
-			if (this.movesdone == 0) {
-				if (Feld[y - 2]) {
-					if (Feld[y - 2][x] == "" && Feld[y - 1][x] == "") {
-						moves.push([y - 2, x]);
-					}
-				}
-			}
-			if (Feld[y - 1]) {
-				if (Feld[y - 1][x + 1]) {
-					if (Feld[y - 1][x + 1] != "") {
-						if (Feld[y - 1][x + 1].color != this.color) {
-							moves.push([y - 1, x + 1]);
-						}
-					}
-				}
-			}
-			if (Feld[y - 1]) {
-				if (Feld[y - 1][x - 1]) {
-					if (Feld[y - 1][x - 1] != "") {
-						if (Feld[y - 1][x - 1].color != this.color) {
-							moves.push([y - 1, x - 1]);
-						}
-					}
-				}
-			}
-		} else if (this.color == "B") {
-			if (Feld[y + 1]) {
-				if (Feld[y + 1][x - 1] != undefined) {
-					if (Feld[y][x - 1] != "") {
-						if (Feld[y][x - 1].name == "B" && Feld[y][x - 1].color != this.color && Feld[y][x - 1].movesdone == 1 && Feld[y][x - 1].lastmove) {
-							moves.push([y + 1, x - 1, y, x - 1]);
-						}
-					}
-				}
-				if (Feld[y + 1][x + 1] != undefined) {
-					if (Feld[y][x + 1] != "") {
-						if (Feld[y][x + 1].name == "B" && Feld[y][x + 1].color != this.color && Feld[y][x + 1].movesdone == 1 && Feld[y][x + 1].lastmove) {
-							moves.push([y + 1, x + 1, y, x + 1]);
-						}
-					}
-				}
-			}
-
-			if (Feld[y + 1][x] == "") {
-				moves.push([y + 1, x]);
-			}
-
-			if (this.movesdone == 0) {
-				if (Feld[y + 2]) {
-					if (Feld[y + 2][x] == "" && Feld[y + 1][x] == "") {
-						moves.push([y + 2, x]);
-					}
-				}
-			}
-			if (Feld[y + 1]) {
-				if (Feld[y + 1][x + 1]) {
-					if (Feld[y + 1][x + 1] != "") {
-						if (Feld[y + 1][x + 1].color != this.color) {
-							moves.push([y + 1, x + 1]);
-						}
-					}
-				}
-			}
-			if (Feld[y + 1]) {
-				if (Feld[y + 1][x - 1]) {
-					if (Feld[y + 1][x - 1] != "") {
-						if (Feld[y + 1][x - 1].color != this.color) {
-							moves.push([y + 1, x - 1]);
-						}
-					}
-				}
-			}
-		}
-
-		return moves;
 	}
 }
 
