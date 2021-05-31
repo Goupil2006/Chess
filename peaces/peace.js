@@ -1,5 +1,6 @@
 class piece {
-	constructor(x, y, color) {
+	constructor(x, y, color, img) {
+		this.img = img;
 		this.x = x;
 		this.y = y;
 		this.color = color;

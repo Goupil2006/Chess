@@ -3,6 +3,7 @@
 class Board {
 	constructor() {
 		this.state = 1;
+		this.moves = [];
 		this.Tempispin = false;
 		this.move = "";
 		this.Feld = [];
@@ -72,41 +73,42 @@ class Board {
 	}
 
 	constructFeld() {
-		this.Feld[6][0] = new Pawn(0, 6, "W");
-		this.Feld[6][1] = new Pawn(1, 6, "W");
-		this.Feld[6][2] = new Pawn(2, 6, "W");
-		this.Feld[6][3] = new Pawn(3, 6, "W");
-		this.Feld[6][4] = new Pawn(4, 6, "W");
-		this.Feld[6][5] = new Pawn(5, 6, "W");
-		this.Feld[6][6] = new Pawn(6, 6, "W");
-		this.Feld[6][7] = new Pawn(7, 6, "W");
+		this.Feld[6][0] = new Pawn(0, 6, "W", "/img/Pawn_White.png");
+		this.Feld[6][1] = new Pawn(1, 6, "W", "/img/Pawn_White.png");
+		this.Feld[6][2] = new Pawn(2, 6, "W", "/img/Pawn_White.png");
+		this.Feld[6][3] = new Pawn(3, 6, "W", "/img/Pawn_White.png");
+		this.Feld[6][4] = new Pawn(4, 6, "W", "/img/Pawn_White.png");
+		this.Feld[6][5] = new Pawn(5, 6, "W", "/img/Pawn_White.png");
+		this.Feld[6][6] = new Pawn(6, 6, "W", "/img/Pawn_White.png");
+		this.Feld[6][7] = new Pawn(7, 6, "W", "/img/Pawn_White.png");
 
-		this.Feld[7][0] = new Rook(0, 7, "W");
-		this.Feld[7][1] = new Knight(1, 7, "W");
-		this.Feld[7][2] = new Bichop(2, 7, "W");
-		this.Feld[7][3] = new Queen(3, 7, "W");
-		this.Feld[7][4] = new King(4, 7, "W");
-		this.Feld[7][5] = new Bichop(5, 7, "W");
-		this.Feld[7][6] = new Knight(6, 7, "W");
-		this.Feld[7][7] = new Rook(7, 7, "W");
+		this.Feld[7][0] = new Rook(0, 7, "W", "/img/Rook_White.png");
+		this.Feld[7][1] = new Knight(1, 7, "W", "/img/Knight_White.png");
+		this.Feld[7][2] = new Bichop(2, 7, "W", "/img/Bishop_White.png");
+		this.Feld[7][3] = new Queen(3, 7, "W", "/img/Queen_White.png");
+		this.Feld[7][5] = new Bichop(5, 7, "W", "/img/Bishop_White.png");
+		this.Feld[7][6] = new Knight(6, 7, "W", "/img/Knight_White.png");
+		this.Feld[7][7] = new Rook(7, 7, "W", "/img/Rook_White.png");
 
-		this.Feld[1][0] = new Pawn(0, 1, "B");
-		this.Feld[1][1] = new Pawn(1, 1, "B");
-		this.Feld[1][2] = new Pawn(2, 1, "B");
-		this.Feld[1][3] = new Pawn(3, 1, "B");
-		this.Feld[1][4] = new Pawn(4, 1, "B");
-		this.Feld[1][5] = new Pawn(5, 1, "B");
-		this.Feld[1][6] = new Pawn(6, 1, "B");
-		this.Feld[1][7] = new Pawn(7, 1, "B");
+		this.Feld[1][0] = new Pawn(0, 1, "B", "/img/Pawn_Black.png");
+		this.Feld[1][1] = new Pawn(1, 1, "B", "/img/Pawn_Black.png");
+		this.Feld[1][2] = new Pawn(2, 1, "B", "/img/Pawn_Black.png");
+		this.Feld[1][3] = new Pawn(3, 1, "B", "/img/Pawn_Black.png");
+		this.Feld[1][4] = new Pawn(4, 1, "B", "/img/Pawn_Black.png");
+		this.Feld[1][5] = new Pawn(5, 1, "B", "/img/Pawn_Black.png");
+		this.Feld[1][6] = new Pawn(6, 1, "B", "/img/Pawn_Black.png");
+		this.Feld[1][7] = new Pawn(7, 1, "B", "/img/Pawn_Black.png");
 
-		this.Feld[0][0] = new Rook(0, 0, "B");
-		this.Feld[0][1] = new Knight(1, 0, "B");
-		this.Feld[0][2] = new Bichop(2, 0, "B");
-		this.Feld[0][3] = new Queen(3, 0, "B");
-		this.Feld[0][4] = new King(4, 0, "B");
-		this.Feld[0][5] = new Bichop(5, 0, "B");
-		this.Feld[0][6] = new Knight(6, 0, "B");
-		this.Feld[0][7] = new Rook(7, 0, "B");
+		this.Feld[0][0] = new Rook(0, 0, "B", "/img/Rook_Black.png");
+		this.Feld[0][1] = new Knight(1, 0, "B", "/img/Knight_Black.png");
+		this.Feld[0][2] = new Bichop(2, 0, "B", "/img/Bishop_Black.png");
+		this.Feld[0][3] = new Queen(3, 0, "B", "/img/Queen_Black.png");
+		this.Feld[0][5] = new Bichop(5, 0, "B", "/img/Bishop_Black.png");
+		this.Feld[0][6] = new Knight(6, 0, "B", "/img/Knight_Black.png");
+		this.Feld[0][7] = new Rook(7, 0, "B", "/img/Rook_Black.png");
+
+		this.Feld[7][4] = new King(4, 7, "W", "/img/King_White.png");
+		this.Feld[0][4] = new King(4, 0, "B", "/img/King_Black.png");
 	}
 
 	dotestFeld() {
@@ -171,10 +173,16 @@ class Board {
 					if (moves[Tempmove5][2] != undefined) {
 						this.Feld[moves[Tempmove5][2]][moves[Tempmove5][3]] = "";
 						if (moves[Tempmove5][4] != undefined) {
-							this.Feld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], this.allowed);
+							if (this.allowed == "W") {
+								this.Feld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], "W", "/img/Rook_White.png");
+							}
+							if (this.allowed == "B") {
+								this.Feld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], "B", "/img/Rook_Black.png");
+							}
 							this.Feld[moves[Tempmove5][4]][moves[Tempmove5][5]].change(moves[Tempmove5][5], moves[Tempmove5][4]);
 						}
 					}
+					this.moves.push([String(Temp1) + String(Temp2), String(Temp3) + String(Temp4)]);
 					if (this.allowed == "W") {
 						this.allowed = "B";
 						document.getElementById("had").innerHTML = "Schwarz ist am Zug";
@@ -186,12 +194,12 @@ class Board {
 					for (let y = 0; y < 8; y++) {
 						if (this.Feld[7][y] != "") {
 							if (this.Feld[7][y].name == "B" && this.Feld[7][y].color == "B") {
-								this.Feld[7][y] = new Queen(y, 7, "B");
+								this.Feld[7][y] = new Queen(y, 7, "B", "/img/Queen_Black.png");
 							}
 						}
 						if (this.Feld[0][y] != "") {
 							if (this.Feld[0][y].name == "B" && this.Feld[0][y].color == "W") {
-								this.Feld[0][y] = new Queen(y, 0, "W");
+								this.Feld[0][y] = new Queen(y, 0, "W", "/img/Queen_White.png");
 							}
 						}
 					}
@@ -203,6 +211,8 @@ class Board {
 			}
 		}
 	}
+
+	isdraw() {}
 
 	Eventlisteners() {
 		for (let i = 0; i < 8; i++) {
@@ -236,12 +246,17 @@ class Board {
 		if (moves[Tempmove5][2] != undefined) {
 			this.testFeld[moves[Tempmove5][2]][moves[Tempmove5][3]] = "";
 			if (moves[Tempmove5][4] != undefined) {
-				this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], this.allowed);
+				if (this.allowed == "W") {
+					this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], "W", "/img/Rook_White.png");
+				}
+				if (this.allowed == "B") {
+					this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]] = new Rook(moves[Tempmove5][5], moves[Tempmove5][4], "B", "/img/Rook_Black.png");
+				}
 				this.testFeld[moves[Tempmove5][4]][moves[Tempmove5][5]].change(moves[Tempmove5][5], moves[Tempmove5][4]);
 			}
 		}
 
-		let movescheck = [];
+		/*let movescheck = [];
 
 		this.testFeld.forEach((rank) => {
 			rank.forEach((peace) => {
@@ -266,7 +281,10 @@ class Board {
 					}
 				}
 			}
-		});
+		});*/
+
+		this.Tempispin = this.ischeck(this.testFeld);
+		console.log(this.Tempispin);
 	}
 
 	ismate() {
@@ -308,7 +326,12 @@ class Board {
 					if (allmoves[z][2] != undefined) {
 						this.testFeld[allmoves[z][2]][allmoves[z][3]] = "";
 						if (allmoves[z][4] != undefined) {
-							this.testFeld[allmoves[z][4]][allmoves[z][5]] = new Rook(allmoves[z][5], allmoves[z][4], this.allowed);
+							if (this.allowed == "W") {
+								this.testFeld[allmoves[z][4]][allmoves[z][5]] = new Rook(allmoves[z][5], allmoves[z][4], "W", "/img/Rook_White.png");
+							}
+							if (this.allowed == "B") {
+								this.testFeld[allmoves[z][4]][allmoves[z][5]] = new Rook(allmoves[z][5], allmoves[z][4], "B", "/img/Rook_Black.png");
+							}
 							this.testFeld[allmoves[z][4]][allmoves[z][5]].change(allmoves[z][5], allmoves[z][4]);
 						}
 					}
@@ -354,6 +377,37 @@ class Board {
 		}
 	}
 
+	ischeck(Feld) {
+		let movescheck = [];
+
+		Feld.forEach((rank) => {
+			rank.forEach((peace) => {
+				if (peace != "") {
+					if (peace.color != this.allowed) {
+						let Tempmoves = peace.moves(Feld);
+						Tempmoves.forEach((Move) => {
+							movescheck.push(Move);
+						});
+					}
+				}
+			});
+		});
+
+		let Tempiiii = false;
+
+		movescheck.forEach((move) => {
+			if (Feld[move[0]]) {
+				if (Feld[move[0]][move[1]]) {
+					if (Feld[move[0]][move[1]].name === "K") {
+						Tempiiii = true;
+					}
+				}
+			}
+		});
+
+		return Tempiiii;
+	}
+
 	startrender() {
 		let Board = document.createElement("table");
 		for (let i = 0; i < 8; i++) {
@@ -368,7 +422,7 @@ class Board {
 			}
 			Board.appendChild(rank);
 		}
-		document.body.appendChild(Board);
+		document.getElementById("Board").appendChild(Board);
 	}
 
 	render() {
@@ -376,14 +430,38 @@ class Board {
 			for (let j = 0; j < 8; j++) {
 				if (this.Feld[i][j].name != undefined) {
 					if (this.Feld[i][j].color == "W") {
-						document.getElementById(String(i) + String(j)).innerHTML = "<div class='light drag' draggable='true' id='" + String(i) + String(j) + "d'>" + this.Feld[i][j].name + "</div>";
+						document.getElementById(String(i) + String(j)).innerHTML =
+							"<div class='light drag' draggable='true' id='" + String(i) + String(j) + "d'><img src='" + this.Feld[i][j].img + "' </div>";
 					} else if (this.Feld[i][j].color == "B") {
-						document.getElementById(String(i) + String(j)).innerHTML = "<div class='dark drag' draggable='true' id='" + String(i) + String(j) + "d'>" + this.Feld[i][j].name + "</div>";
+						document.getElementById(String(i) + String(j)).innerHTML =
+							"<div class='dark drag' draggable='true' id='" + String(i) + String(j) + "d'><img src='" + this.Feld[i][j].img + "' </div>";
 					}
 				} else {
 					document.getElementById(String(i) + String(j)).innerHTML = "";
 				}
 			}
+		}
+		let moves = document.querySelectorAll(".move");
+		for (let move of moves) {
+			move.remove();
+		}
+		let buchstaben = ["a", "b", "c", "d", "e", "f", "g", "h"];
+		for (let i = 0; i < this.moves.length / 2; i++) {
+			let Temp1 = this.moves[i][0][0];
+			let Temp2 = this.moves[i][0][1];
+			let Temp3 = this.moves[i][1][0];
+			let Temp4 = this.moves[i][1][1];
+			let teil = document.createElement("li");
+			teil.setAttribute("class", "move");
+			teil.innerHTML = buchstaben[Temp2] + Temp1 + "" + buchstaben[Temp4] + Temp3;
+			if (this.moves[i + 1]) {
+				let Temp5 = this.moves[i + 1][0][0];
+				let Temp6 = this.moves[i + 1][0][1];
+				let Temp7 = this.moves[i + 1][1][0];
+				let Temp8 = this.moves[i + 1][1][1];
+				teil.innerHTML = buchstaben[Temp2] + Temp1 + "" + buchstaben[Temp4] + Temp3 + " " + buchstaben[Temp6] + Temp5 + "" + buchstaben[Temp8] + Temp7;
+			}
+			document.getElementById("moves").append(teil);
 		}
 	}
 }

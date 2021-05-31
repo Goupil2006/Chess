@@ -1,6 +1,6 @@
 class Queen extends piece {
-	constructor(x, y, color) {
-		super(x, y, color);
+	constructor(x, y, color, img) {
+		super(x, y, color, img);
 		this.name = "Q";
 	}
 
